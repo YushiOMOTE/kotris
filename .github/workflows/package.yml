@@ -14,9 +14,9 @@ jobs:
           java-version: '16'
           distribution: 'adopt'
       - name: Build with Gradle
-        run: gradle wrap && chmod +x ./gradlew && ./gradlew jsBrowserDistribution && ls ./build/distributions
+        run: gradle wrap && chmod +x ./gradlew && ./gradlew jsBrowserDistribution
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build/distribution
+          publish_dir: ./build/distributions
