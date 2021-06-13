@@ -4,6 +4,8 @@ Implemented in Kotlin/Korge
 
 ![](./assets/demo.png)
 
+Play on browser: https://yushiomote.github.io/kotris/
+
 ## Keys
 
 * Left/Right: Move left/right
