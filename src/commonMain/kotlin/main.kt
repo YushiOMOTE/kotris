@@ -1,6 +1,6 @@
 import com.soywiz.korev.Key
 import com.soywiz.korge.*
-import com.soywiz.korge.input.keys
+import com.soywiz.korge.input.*
 import com.soywiz.korge.view.*
 import com.soywiz.korim.bitmap.Bitmap
 import com.soywiz.korim.color.*
@@ -17,6 +17,54 @@ fun Container.generateTetromino(images: Array<Bitmap>): Tetromino {
     }
 }
 
+fun moveLeft(well: Well, t: Tetromino) {
+    t.moveLeft()
+    if (well.collision(t)) {
+        t.moveRight()
+    }
+    t.draw()
+}
+
+fun moveRight(well: Well, t: Tetromino) {
+    t.moveRight()
+    if (well.collision(t)) {
+        t.moveLeft()
+    }
+    t.draw()
+}
+
+fun rotateLeft(well: Well, t: Tetromino) {
+    t.rotateLeft()
+    if (well.collision(t)) {
+        t.rotateRight()
+    }
+    t.draw()
+}
+
+fun rotateRight(well: Well, t: Tetromino) {
+    t.rotateRight()
+    if (well.collision(t)) {
+        t.rotateLeft()
+    }
+    t.draw()
+}
+
+fun softDrop(well: Well, t: Tetromino) {
+    t.moveDown()
+    if (well.collision(t)) {
+        t.moveUp()
+    }
+    t.draw()
+}
+
+fun hardDrop(well: Well, t: Tetromino) {
+    while (!well.collision(t)) {
+        t.moveDown()
+    }
+    t.moveUp()
+    t.draw()
+}
+
 suspend fun main() = Korge(width = 512, height = 512, bgcolor = Colors["#2b2b2b"]) {
     val images = Array(9) { resourcesVfs["chokkaku${it + 1}.png"].readBitmap() }
 
@@ -25,49 +73,30 @@ suspend fun main() = Korge(width = 512, height = 512, bgcolor = Colors["#2b2b2b"
 
     keys.down {
         when (it.key) {
-            Key.LEFT -> {
-                t.moveLeft()
-                if (well.collision(t)) {
-                    t.moveRight()
-                }
-                t.draw()
-            }
-            Key.RIGHT -> {
-                t.moveRight()
-                if (well.collision(t)) {
-                    t.moveLeft()
-                }
-                t.draw()
-            }
-            Key.Z -> {
-                t.rotateLeft()
-                if (well.collision(t)) {
-                    t.rotateRight()
-                }
-                t.draw()
-            }
-            Key.X -> {
-                t.rotateRight()
-                if (well.collision(t)) {
-                    t.rotateLeft()
-                }
-                t.draw()
-            }
-            Key.DOWN -> {
-                t.moveDown()
-                if (well.collision(t)) {
-                    t.moveUp()
-                }
-                t.draw()
-            }
-            Key.UP -> {
-                while (!well.collision(t)) {
-                    t.moveDown()
-                }
-                t.moveUp()
-                t.draw()
-            }
+            Key.LEFT -> moveLeft(well, t)
+            Key.RIGHT -> moveRight(well, t)
+            Key.Z -> rotateLeft(well, t)
+            Key.X -> rotateRight(well, t)
+            Key.DOWN -> softDrop(well, t)
+            Key.UP -> hardDrop(well, t)
             else -> Unit
+        }
+    }
+
+    onClick {
+        if (it.currentPosLocal.x > (well.width / 2) + well.x) {
+            rotateRight(well, t)
+        } else {
+            rotateLeft(well, t)
+        }
+    }
+
+    onSwipe(20.0) {
+        when (it.direction) {
+            SwipeDirection.LEFT -> moveLeft(well, t)
+            SwipeDirection.RIGHT -> moveRight(well, t)
+            SwipeDirection.TOP -> hardDrop(well, t)
+            SwipeDirection.BOTTOM -> softDrop(well, t)
         }
     }
 
