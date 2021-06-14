@@ -1,7 +1,4 @@
-import com.soywiz.klock.milliseconds
 import com.soywiz.korge.view.position
-import com.soywiz.korge.view.tween.moveTo
-import com.soywiz.korma.geom.triangle.Triangle
 
 class BlockMap(var width: Int, var height: Int) {
     private var blocks = Array<Array<Block?>>(height) { Array(width) { null } }
@@ -63,7 +60,7 @@ class BlockMap(var width: Int, var height: Int) {
 
     fun rows(): Sequence<IndexedValue<Array<Block?>>> = blocks.asSequence().withIndex()
 
-    suspend fun draw(baseX: Double, baseY: Double) {
-        blocks().forEach { (x, y, b) -> b?.moveTo(x * Block.WIDTH + baseX, y * Block.HEIGHT + baseY, 10.milliseconds) }
+    fun draw(baseX: Double, baseY: Double) {
+        blocks().forEach { (x, y, b) -> b?.position(x * Block.WIDTH + baseX, y * Block.HEIGHT + baseY) }
     }
 }
