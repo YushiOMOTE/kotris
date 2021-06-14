@@ -6,6 +6,7 @@ import com.soywiz.korim.bitmap.Bitmap
 
 class Well(bitmap: Bitmap, private val num_x: Int, private val num_y: Int) : Container() {
     private val blockMap: BlockMap = BlockMap(num_x, num_y)
+    private var cleaned: Int = 0
 
     init {
         // Draw side and bottom lines
@@ -21,24 +22,26 @@ class Well(bitmap: Bitmap, private val num_x: Int, private val num_y: Int) : Con
         }
     }
 
-    fun collision(p: Tetromino): Boolean =
-        p.blockMap.blocks().any { (x, y, pb) ->
-            val wx = p.x + x
-            val wy = p.y + y
-            val wb = blockMap.get(wx, wy)
-            if (wb != null && pb != null) {
-                true
-            } else if (pb != null) {
-                wx < 0 || wx >= num_x || y < 0 || wy >= num_y
-            } else {
-                false
-            }
-        }
+    fun collision(t: Tetromino): Boolean =
+        t.blockMap.blocks()
+            .any { (x, y, b) ->
+                if (b == null) {
+                    return@any false
+                }
 
-    fun merge(p: Tetromino) {
-        p.blockMap.blocks().forEach { (x, y, pb) ->
-            if (pb != null)
-                blockMap.set(p.x + x, p.y + y, pb)
+                val tx = t.x + x
+                val ty = t.y + y
+                if (tx < 0 || tx >= num_x || ty < 0 || ty >= num_y) {
+                    true
+                } else {
+                    blockMap.get(tx, ty) != null
+                }
+            }
+
+    fun merge(t: Tetromino) {
+        t.blockMap.blocks().forEach { (x, y, b) ->
+            if (b != null)
+                blockMap.set(t.x + x, t.y + y, b)
         }
     }
 
@@ -53,10 +56,12 @@ class Well(bitmap: Bitmap, private val num_x: Int, private val num_y: Int) : Con
             blockMap.setRow(yy, blockMap.getRow(yy - 1).copyOf())
         }
 
+        cleaned++
+
         return true
     }
 
-    fun draw() {
+    suspend fun draw() {
         val baseX = (x + 1) * Block.WIDTH
         val baseY = y * Block.HEIGHT
         blockMap.draw(baseX, baseY)
