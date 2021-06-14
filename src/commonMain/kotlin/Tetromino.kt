@@ -43,7 +43,7 @@ class Tetromino(type: TetrominoType, var x: Int, var y: Int, var block: () -> Bl
         blockMap.rotateRight()
     }
 
-    suspend fun draw() {
+    fun draw() {
         val baseX = (x + 1) * Block.WIDTH
         val baseY = y * Block.HEIGHT
         blockMap.draw(baseX, baseY)

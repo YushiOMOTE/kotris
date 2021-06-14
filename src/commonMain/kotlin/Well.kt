@@ -61,7 +61,7 @@ class Well(bitmap: Bitmap, private val num_x: Int, private val num_y: Int) : Con
         return true
     }
 
-    suspend fun draw() {
+    fun draw() {
         val baseX = (x + 1) * Block.WIDTH
         val baseY = y * Block.HEIGHT
         blockMap.draw(baseX, baseY)
