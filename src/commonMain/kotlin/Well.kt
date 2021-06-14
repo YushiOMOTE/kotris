@@ -50,7 +50,7 @@ class Well(bitmap: Bitmap, private val num_x: Int, private val num_y: Int) : Con
         row.forEach { it?.removeFromParent() }
 
         (y downTo 1).forEach { yy ->
-            blockMap.setRow(yy, blockMap.getRow(yy - 1))
+            blockMap.setRow(yy, blockMap.getRow(yy - 1).copyOf())
         }
 
         return true

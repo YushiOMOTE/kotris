@@ -64,4 +64,19 @@ class BlockMap(var width: Int, var height: Int) {
     fun draw(baseX: Double, baseY: Double) {
         blocks().forEach { (x, y, b) -> b?.position(x * Block.WIDTH + baseX, y * Block.HEIGHT + baseY) }
     }
+
+    fun dump() {
+        blocks.withIndex().forEach { (y, row) ->
+            row.withIndex().forEach { (x, b) ->
+                val c = if (b != null) {
+                    "*"
+                } else {
+                    "."
+                }
+                print("$c")
+            }
+            println()
+        }
+    }
+
 }
