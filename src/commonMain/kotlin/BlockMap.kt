@@ -65,7 +65,7 @@ class BlockMap(var width: Int, var height: Int) {
     }
 
     fun clear() {
-        blocks().forEach { (x, y, b) ->
+        blocks().forEach { (_, _, b) ->
             b?.removeFromParent()
         }
         blocks.forEach { it.fill(null) }

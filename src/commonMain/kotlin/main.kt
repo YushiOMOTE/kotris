@@ -2,14 +2,9 @@ import com.soywiz.korau.sound.*
 import com.soywiz.korev.Key
 import com.soywiz.korge.*
 import com.soywiz.korge.input.*
-import com.soywiz.korge.ui.textAlignment
-import com.soywiz.korge.ui.uiText
 import com.soywiz.korge.view.*
 import com.soywiz.korim.color.*
 import com.soywiz.korim.format.*
-import com.soywiz.korim.text.HorizontalAlign
-import com.soywiz.korim.text.TextAlignment
-import com.soywiz.korim.text.VerticalAlign
 import com.soywiz.korio.async.launchImmediately
 import com.soywiz.korio.file.std.*
 
@@ -29,7 +24,7 @@ fun Container.gameover(ctx: Context, onRestart: suspend () -> Unit) =
             onRestart()
         }
 
-        var title = text("Game Over") {
+        val title = text("Game Over") {
             centerXOn(this@container)
             centerYOn(this@container)
         }
