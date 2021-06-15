@@ -63,4 +63,11 @@ class BlockMap(var width: Int, var height: Int) {
     fun draw(baseX: Double, baseY: Double) {
         blocks().forEach { (x, y, b) -> b?.position(x * Block.WIDTH + baseX, y * Block.HEIGHT + baseY) }
     }
+
+    fun clear() {
+        blocks().forEach { (x, y, b) ->
+            b?.removeFromParent()
+        }
+        blocks.forEach { it.fill(null) }
+    }
 }

@@ -1,12 +1,9 @@
-import com.soywiz.korge.view.Container
-import com.soywiz.korge.view.image
-import com.soywiz.korge.view.position
-import com.soywiz.korge.view.size
+import com.soywiz.korge.view.*
 import com.soywiz.korim.bitmap.Bitmap
 
-class Well(bitmap: Bitmap, private val num_x: Int, private val num_y: Int) : Container() {
+class Well(bitmap: Bitmap, private val num_x: Int, private val num_y: Int) :
+    Container() {
     private val blockMap: BlockMap = BlockMap(num_x, num_y)
-    private var cleaned: Int = 0
 
     init {
         // Draw side and bottom lines
@@ -56,14 +53,14 @@ class Well(bitmap: Bitmap, private val num_x: Int, private val num_y: Int) : Con
             blockMap.setRow(yy, blockMap.getRow(yy - 1).copyOf())
         }
 
-        cleaned++
-
         return true
     }
 
+    fun clear() {
+        blockMap.clear()
+    }
+
     fun draw() {
-        val baseX = (x + 1) * Block.WIDTH
-        val baseY = y * Block.HEIGHT
-        blockMap.draw(baseX, baseY)
+        blockMap.draw(Block.WIDTH, 0.0)
     }
 }
